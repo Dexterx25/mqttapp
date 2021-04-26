@@ -1,13 +1,9 @@
 const {nanoid} = require('nanoid')
 const bcrypt = require('bcrypt')
 const auth = require('../../../auth')
-const response = require('../../../network/response')
-const ctrlDevice = require('../../../MSV_devices/components/devices/index')
-const config  = require('../../../config')
-const controller = require('../../../MSV_devices/components/devices/controller')
-const CTRnotification = require('../../../MSV_notifications/components/notifications/index')
-const { resolve } = require('path')
-const { reject } = require('lodash')
+
+//const CTRnotification = require('../../../MSV_notifications/components/notifications/index')
+
 module.exports = function(injectedStore){
 let store = injectedStore
 if(!store){
@@ -99,98 +95,98 @@ const getReset = (data) =>{
 // })
 // }
 
-const forgetPass = (data) =>{
-return new Promise(async(resolve, reject)=>{
-    if(!data.email){
-        reject('There are not email here')
-        return false;
-    }
+// const forgetPass = (data) =>{
+// return new Promise(async(resolve, reject)=>{
+//     if(!data.email){
+//         reject('There are not email here')
+//         return false;
+//     }
     
-  const respon = await  store.forgetMyPass(data)
-  if(respon === undefined){
-    reject('Email there are incorret or not exits')
-    return false;
-}
-if(respon.email == data.email){
+//   const respon = await  store.forgetMyPass(data)
+//   if(respon === undefined){
+//     reject('Email there are incorret or not exits')
+//     return false;
+// }
+// if(respon.email == data.email){
   
-   // if(responResetToken){
+//    // if(responResetToken){
   
-   CTRnotification.resetPasswordMail(respon)
-   .then( async(res)=>{
-    console.warn('this is the estatus Email--->', res)
-      await store.inserCode(res)
-    .then((resCode) =>{
-        console.warn('resCode insert success-->', resCode)
-    })
-    .catch((error)=>{
-        console.warn('error insertCode', error)
-    })
-   })
-   .catch((error) =>{
-       console.warn('this is the error =>', error)
-   })
-   // }
+//    CTRnotification.resetPasswordMail(respon)
+//    .then( async(res)=>{
+//     console.warn('this is the estatus Email--->', res)
+//       await store.inserCode(res)
+//     .then((resCode) =>{
+//         console.warn('resCode insert success-->', resCode)
+//     })
+//     .catch((error)=>{
+//         console.warn('error insertCode', error)
+//     })
+//    })
+//    .catch((error) =>{
+//        console.warn('this is the error =>', error)
+//    })
+//    // }
 
-} 
-console.warn('this is the responRes since ControllerAuth--->', respon)
+// } 
+// console.warn('this is the responRes since ControllerAuth--->', respon)
 
-  resolve(respon)
+//   resolve(respon)
 
-})
-}
-const compareCode = (data) =>{
-    return new Promise(async(resolve, reject) =>{
-        if(!data){
-            reject('there are not data')
-            return false;
-        }
+// })
+// }
+// const compareCode = (data) =>{
+//     return new Promise(async(resolve, reject) =>{
+//         if(!data){
+//             reject('there are not data')
+//             return false;
+//         }
 
-        const dataToStore = await store.compareCodes(data)
-        if(dataToStore.recovery_pin == data.code){
+//         const dataToStore = await store.compareCodes(data)
+//         if(dataToStore.recovery_pin == data.code){
 
-            console.warn('SI ES UN CODIGO CORRECTO, vamos a reiniciar esta vg de token-->', dataToStore.recovery_pin + ' EQUAL--->', data.code)
+//             console.warn('SI ES UN CODIGO CORRECTO, vamos a reiniciar esta vg de token-->', dataToStore.recovery_pin + ' EQUAL--->', data.code)
             
-        }else{
-           reject('RECOVERY CODE IS INVALID')
-        }
-          if(dataToStore.code)
-        console.warn('Status compareCodes--->', dataToStore) 
-      resolve(dataToStore)
+//         }else{
+//            reject('RECOVERY CODE IS INVALID')
+//         }
+//           if(dataToStore.code)
+//         console.warn('Status compareCodes--->', dataToStore) 
+//       resolve(dataToStore)
 
-    })
-}
-const resetPassword = async (data) =>{
-    return new Promise(async(resolve, reject) =>{
-        if(!data){
-            reject('there are not data!')
-            return false;
-        }
-        if(data.password == data.confirmPassword){
-            console.warn('se procede a encriptar la password')
-            const passwordBcrypt = await bcrypt.hash(data.password, 5)
-            const dataToStore = {
-                newpassword:passwordBcrypt,
-                email:data.email,
-                code:data.code
-            }
-          const respon = await store.resetPassword(dataToStore)
-          console.warn('respon of insert newPass--->', respon)
-          if(respon.recovery_pin == data.code){
-            console.warn('se preocede a genererar token')
-            const token = auth.sign(respon)
-            console.warn('this is the token--->', token)
-            resolve(token)
-         }
-        }else{
-            reject('password and confirmapPassWord dont are equals')
-            return false;
-        }
+//     })
+// }
+// const resetPassword = async (data) =>{
+//     return new Promise(async(resolve, reject) =>{
+//         if(!data){
+//             reject('there are not data!')
+//             return false;
+//         }
+//         if(data.password == data.confirmPassword){
+//             console.warn('se procede a encriptar la password')
+//             const passwordBcrypt = await bcrypt.hash(data.password, 5)
+//             const dataToStore = {
+//                 newpassword:passwordBcrypt,
+//                 email:data.email,
+//                 code:data.code
+//             }
+//           const respon = await store.resetPassword(dataToStore)
+//           console.warn('respon of insert newPass--->', respon)
+//           if(respon.recovery_pin == data.code){
+//             console.warn('se preocede a genererar token')
+//             const token = auth.sign(respon)
+//             console.warn('this is the token--->', token)
+//             resolve(token)
+//          }
+//         }else{
+//             reject('password and confirmapPassWord dont are equals')
+//             return false;
+//         }
      
      
 
 
-    })
-}
+//     })
+// }
 return{
     upsertAuth,
     insertLogin,
