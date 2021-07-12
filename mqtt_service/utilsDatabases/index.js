@@ -1,14 +1,16 @@
 const pool = require('../../db')
 
 
- async function insertDatas (data, table){
+ async function upsertDatas (data, table, topic){
+     console.warn('data inserDatas to db---->', data, table )
    try {
-    const iterator =  data.map(item =>  ` ( '${item}'` + `, '${id}'  )`)
-    const dataInsert = iterator.toString().replace("[", "").replace("]", "")
+     //  const verification
+    // const iterator =  data.map(item =>  ` ( '${item}'` + `, '${id}'  )`)
+    // const dataInsert = iterator.toString().replace("[", "").replace("]", "")
 
-    console.log('ESTE ES EL CONVERT DE LOS ID de inserción de datos-->', dataInsert)
+    // console.log('ESTE ES EL CONVERT DE LOS ID de inserción de datos-->', dataInsert)
   
-    const responReq = await (await pool.query(`INSERT INTO ${table} values(${dataInsert}) RETURNING *`)).rows
+   /// const responReq = await (await pool.query(`INSERT INTO ${table} values(${dataInsert}) where user_id = $1 RETURNING *`)).rows
         return responReq    
    
     } catch (error) {
@@ -43,7 +45,7 @@ const pool = require('../../db')
       }
 }
 module.exports = {
-    insertDatas,
+    upsertDatas,
     getAllDatas,
     getAllForDeviceId,
     getSingleData

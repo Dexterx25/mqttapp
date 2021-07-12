@@ -1,11 +1,11 @@
-const {insertDatas} = require('../utilsDatabases')
+const {upsertDatas} = require('../utilsDatabases')
 
 //ADD DHT TELEMETRIES--->
-const add = async (data, table, type) =>{
+const upsert = async (data, table, type) =>{
     
-console.warn('THIS IS THE DATA TO ADD TELEMETUES---', data, table, type)
+console.warn('THIS IS THE DATA TO upsert TELEMETUES---', data, table, type)
     try {
-   const respon = await insertDatas(data, table)
+   const respon = await upsertDatas(data, table)
     return respon
     } catch (error) {
         console.warn('THIS IS THE ERROR--->', error)    
@@ -25,7 +25,7 @@ const remove = () =>{
 
 }
 module.exports = {
-add,
+upsert,
 getSingle,
 getAll, 
 update, 

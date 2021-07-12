@@ -11,6 +11,6 @@ sub.on('connect', () => {
 sub.on('message', (topic, message) => {
     console.warn('THIS IS TEH Message-->', topic, message.toString())
     const data = message.toString()
-    store.add(data, table, topic)
+    store.upsert(data, table, topic)
    
 })

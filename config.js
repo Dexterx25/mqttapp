@@ -45,6 +45,12 @@ const config = {
         port: process.env.REDIS_SRV_PORT || 6379,
        //pasword: process.env.REDIS_SRV_PORT  || 'q6mUvhd8y7539z+yMGFnQetknyTPhmQvlgaIwrxDjKojljEjNhKQY72Tpmc2PyD02VbamA7B2GcPtyDar'
     },
+    mqtt_config:{
+        publisher:{
+            serial_conexion:false,
+            remote_conexion:true    
+        }
+    },
     
     EmailService:{
         NewUserInvitation:{
